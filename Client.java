@@ -28,9 +28,13 @@ public class Client{
         //user input for port number
         int portNum;
         System.out.println("Enter the port number of the server:");
-        while(true) { //TODO: change this to also valid negative integers
+        while(true) { //valid integer check
             try {
                   portNum = Integer.parseInt(port.nextLine());
+                  while(portNum > 65535 || portNum < 1){ //valid integer check within range
+                    System.out.println("Enter valid port number: ");
+                    portNum = Integer.parseInt(port.nextLine());
+                  }
                   break;
             }catch (NumberFormatException e) {
                 System.out.println("Enter valid port number: ");
