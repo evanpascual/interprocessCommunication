@@ -4,8 +4,10 @@ import java.net.*;
 
 public class EchoClient{
 
+    public static int portNum = -1; //creating global variables to send to echo server  
+
     //prompts user to enter a valid ip address until one is entered. Returns the ip addresss as a string.  
-    static String getIPAddress(){
+    static String setIPAddress(){
         
         //initializers
         Scanner ip = new Scanner(System.in);
@@ -24,10 +26,9 @@ public class EchoClient{
     }
 
     //prompts user to enter a valid port number until one is entered. 
-    static int getPortNum(){
+    static int setPortNum(){
 
         //initializers
-        int portNum;
         Scanner port = new Scanner(System.in);
 
         //user input for port number
@@ -49,35 +50,38 @@ public class EchoClient{
         return portNum;
     }
 
-    public static void main(String[] args) throws UnknownHostException {
+    //used to send to echo server
+    static int getPortNum(){
+        return portNum;
+    }
 
-        //initialize ip and host
-        InetAddress ipAddress = InetAddress.getByName(getIPAddress());
-        int portNum = getPortNum();
+    public static void main(String[] args){
 
-        //Creating Socket
-        try (
-            Socket echoSocket = new Socket(ipAddress, portNum);
-            PrintWriter out =
-                new PrintWriter(echoSocket.getOutputStream(), true);
-            BufferedReader in =
-                new BufferedReader(
-                    new InputStreamReader(echoSocket.getInputStream()));
-            BufferedReader stdIn =
-                new BufferedReader(
-                    new InputStreamReader(System.in))
-        ) {
-            String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
-                out.println(userInput);
-                System.out.println("echo: " + in.readLine());
+        System.out.println("Begin echo client..."); //test that the program has started
+
+        try{
+            InetAddress ipAddress = InetAddress.getByName(setIPAddress());
+            int portNum = setPortNum();
+            Socket socket = new Socket(ipAddress, portNum);// creating Socket
+            
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println("Connected to server!");
+            
+            Scanner scanner = new Scanner(System.in); //takes user input
+            while(true){
+                System.out.println("Enter a message to echo:");
+                String message = scanner.nextLine();
+                if("exit".equalsIgnoreCase(message)){
+                    break;
+                }
+                out.println(message);
+                String response = bufferedReader.readLine();
+                System.out.println("Server: ");
             }
-        } catch (UnknownHostException e) {
-            System.err.println("UnknownHostException");
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("IOException");
-            System.exit(1);
-        } 
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }
 }
