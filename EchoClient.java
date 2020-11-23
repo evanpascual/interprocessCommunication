@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.io.*;
 import java.net.*; 
 
-public class Client{
+public class EchoClient{
 
     //prompts user to enter a valid ip address until one is entered. Returns the ip addresss as a string.  
     static String getIPAddress(){
@@ -76,7 +76,7 @@ public class Client{
             System.err.println("UnknownHostException");
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("IOEXception");
+            System.err.println("IOException");
             System.exit(1);
         } 
     }

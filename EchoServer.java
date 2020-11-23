@@ -1,8 +1,10 @@
 import java.net.*;
 import java.io.*;
 
-public class Server {
+public class EchoServer {
     public static void main(String[] args) throws IOException {
+
+        System.out.println("Begin echo server..."); //test that the program has started
         
         if (args.length != 1) {
             System.err.println("Usage: java EchoServer <port number>");
